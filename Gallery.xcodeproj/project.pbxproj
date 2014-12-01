@@ -13,8 +13,11 @@
 		1324039B1A27DB1B00781EC5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 132403951A27DB1B00781EC5 /* LaunchScreen.xib */; };
 		1324039C1A27DB1B00781EC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 132403971A27DB1B00781EC5 /* Main.storyboard */; };
 		1324039D1A27DB1B00781EC5 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132403991A27DB1B00781EC5 /* RootViewController.swift */; };
+		1324039F1A27DD8200781EC5 /* GalleryPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1324039E1A27DD8200781EC5 /* GalleryPageViewController.swift */; };
+		132403A21A27E47D00781EC5 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132403A11A27E47D00781EC5 /* ImageViewController.swift */; };
 		132403B91A2B2BBD00781EC5 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 132403B11A2B2A7300781EC5 /* libSDWebImage.a */; };
 		132403BC1A2B337E00781EC5 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 132403BB1A2B337E00781EC5 /* ImageIO.framework */; };
+		132403BF1A2BB8D400781EC5 /* Optional+FlatMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132403BE1A2BB8D400781EC5 /* Optional+FlatMap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,9 +69,12 @@
 		132403961A27DB1B00781EC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		132403981A27DB1B00781EC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		132403991A27DB1B00781EC5 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		1324039E1A27DD8200781EC5 /* GalleryPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryPageViewController.swift; sourceTree = "<group>"; };
+		132403A11A27E47D00781EC5 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		132403A91A2B2A7200781EC5 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		132403BA1A2B2D0000781EC5 /* Gallery-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Gallery-Bridging-Header.h"; sourceTree = "<group>"; };
 		132403BB1A2B337E00781EC5 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		132403BE1A2BB8D400781EC5 /* Optional+FlatMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+FlatMap.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +166,7 @@
 			children = (
 				132403931A27DB1B00781EC5 /* AppDelegate.swift */,
 				132403941A27DB1B00781EC5 /* UI */,
+				132403BE1A2BB8D400781EC5 /* Optional+FlatMap.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -170,6 +177,8 @@
 				132403951A27DB1B00781EC5 /* LaunchScreen.xib */,
 				132403971A27DB1B00781EC5 /* Main.storyboard */,
 				132403991A27DB1B00781EC5 /* RootViewController.swift */,
+				1324039E1A27DD8200781EC5 /* GalleryPageViewController.swift */,
+				132403A11A27E47D00781EC5 /* ImageViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -332,8 +341,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1324039F1A27DD8200781EC5 /* GalleryPageViewController.swift in Sources */,
+				132403BF1A2BB8D400781EC5 /* Optional+FlatMap.swift in Sources */,
 				1324039A1A27DB1B00781EC5 /* AppDelegate.swift in Sources */,
 				1324039D1A27DB1B00781EC5 /* RootViewController.swift in Sources */,
+				132403A21A27E47D00781EC5 /* ImageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,7 +474,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Gallery/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -478,7 +490,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Gallery/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
