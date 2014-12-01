@@ -34,7 +34,11 @@ class RootViewController: UIViewController {
         let viewController = self.storyboard?.instantiateViewControllerWithIdentifier("GalleryPageViewController") as? GalleryPageViewController
         
         if let galleryPageViewController = viewController {
-            let linkStrings = ["http://fr.academic.ru/pictures/frwiki/77/M101_hires_STScI-PRC2006-10a.jpg", "http://www.turbophoto.com/space/webart/sunb-hires.jpg", "http://fc07.deviantart.net/fs70/f/2012/140/2/5/tiny_shiny_garden___hires_hdr_render_by_thargor6-d50hq0s.jpg", "http://www.turbophoto.com/hires/shuttle2-hires.jpeg"]
+            let linkStrings = ["http://fr.academic.ru/pictures/frwiki/77/M101_hires_STScI-PRC2006-10a.jpg",
+                               "http://www.turbophoto.com/space/webart/sunb-hires.jpg",
+                               "http://www.wallpaperzzz.com/wallpapers/hd/hires/big-tree.jpg",
+                               "http://www.turbophoto.com/hires/shuttle2-hires.jpeg",
+                               "http://blog.dannyweeks.com/wp-content/uploads/2013/08/Saturns-moon-Enceladus-hires-Desktop-Wallpaper.jpg"]
             let links = linkStrings.map { NSURL(string: $0) }.reduce([NSURL]()) { acc, value in
                 if let value = value {
                     return acc + [value]
