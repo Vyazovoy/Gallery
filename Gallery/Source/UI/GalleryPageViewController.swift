@@ -65,7 +65,7 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
         configureCloseButton()
         configureInfoLabel()
         configurePagesForCurrentLinks()
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleGesture:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleGesture(_:)))
         view.addGestureRecognizer(tapRecognizer)
         view.backgroundColor = UIColor(white: 41.0 / 255.0, alpha: 1.0)
     }
@@ -102,7 +102,7 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
         let imageViewController = viewController as? ImageViewController
         
-        if let index = imageViewController?.link.flatMap({find(self.links, $0)}) {
+        if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
             if index - 1 >= 0 {
                 let previousImageViewController = dequeueImageViewController()
                 previousImageViewController?.link = links[index - 1]
@@ -117,7 +117,7 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
     func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
         let imageViewController = viewController as? ImageViewController
         
-        if let index = imageViewController?.link.flatMap({find(self.links, $0)}) {
+        if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
             if index + 1 < links.count {
                 let nextImageViewController = dequeueImageViewController()
                 nextImageViewController?.link = links[index + 1]
@@ -131,16 +131,16 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
     
     // MARK: UIPageViewControllerDelegate Methods
     
-    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [AnyObject]) {
+    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
         
     }
     
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
+    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             overlayHidden = true
-            let imageViewController = viewControllers.first as? ImageViewController
+            let imageViewController = viewControllers?.first as? ImageViewController
             
-            if let index = imageViewController?.link.flatMap({find(self.links, $0)}) {
+            if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
                 infoLabel.text = "\(index + 1)/\(links.count)"
             } else {
                 infoLabel.text = ""
@@ -153,10 +153,10 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
     @IBAction func buttonTapped(sender: UIButton) {
         switch (sender) {
         case shareButton:
-            println("Share")
+            print("Share")
             
         case closeButton:
-            println("Close")
+            print("Close")
             if let navigationController = navigationController {
                 navigationController.popViewControllerAnimated(true)
             } else {
@@ -164,7 +164,7 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
             }
             
         default:
-            println("Share")
+            print("Share")
         }
     }
     
@@ -181,7 +181,7 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
     }
     
     private func configurePagesForCurrentLinks() {
-        var initialImageViewController = viewControllers.first as? ImageViewController
+        var initialImageViewController = viewControllers?.first as? ImageViewController
         
         if initialImageViewController == nil {
             initialImageViewController = dequeueImageViewController()
@@ -228,12 +228,12 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
             let button = UIButton()
             button.tintColor = UIColor.whiteColor()
             button.setImage(UIImage(named: "ShareButtonImage"), forState: UIControlState.Normal)
-            button.addTarget(self, action: Selector("buttonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-            button.setTranslatesAutoresizingMaskIntoConstraints(false)
+            button.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            button.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(button)
             
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[button]", options: nil, metrics: nil, views: ["button" : button]))
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-6-[button]", options: nil, metrics: nil, views: ["button" : button]))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-6-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
             button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44.0))
             button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44.0))
             shareButton = button
@@ -245,12 +245,12 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
             let button = UIButton()
             button.tintColor = UIColor.whiteColor()
             button.setImage(UIImage(named: "CloseButtonImage"), forState: UIControlState.Normal)
-            button.addTarget(self, action: Selector("buttonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-            button.setTranslatesAutoresizingMaskIntoConstraints(false)
+            button.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            button.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(button)
             
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[button]", options: nil, metrics: nil, views: ["button" : button]))
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[button]-6-|", options: nil, metrics: nil, views: ["button" : button]))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[button]-6-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
             button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44.0))
             button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44.0))
             closeButton = button
@@ -263,12 +263,12 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
             label.textColor = UIColor.whiteColor()
             label.font = UIFont(name: "Helvetica Neue", size: 16.0)
             label.text = "16/20"
-            label.setTranslatesAutoresizingMaskIntoConstraints(false)
+            label.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(label)
             
-            topLabelConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:|-24-[label]", options: nil, metrics: nil, views: ["label" : label]).first as NSLayoutConstraint
+            topLabelConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:|-24-[label]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["label" : label]).first!
             
-            trailingLabelConstraint = NSLayoutConstraint.constraintsWithVisualFormat("H:[label]-16-|", options: nil, metrics: nil, views: ["label" : label]).first as NSLayoutConstraint
+            trailingLabelConstraint = NSLayoutConstraint.constraintsWithVisualFormat("H:[label]-16-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["label" : label]).first!
             
             horizontalCenterLabelConstraint = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0)
             
