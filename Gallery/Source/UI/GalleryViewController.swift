@@ -3,15 +3,68 @@
 //  Gallery
 //
 //  Created by Andrew Vyazovoy on 28.11.14.
-//  Copyright (c) 2014 My Corp. All rights reserved.
+//  Copyright (c) 2016 Andrew Vyazovoy. All rights reserved.
 //
 
 import UIKit
 
-let UILayoutPriorityDefaultHigh : UILayoutPriority = 750.0
-let UILayoutPriorityDefaultLow : UILayoutPriority = 250.0
-
-class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+final class GalleryViewController: UIViewController {
+    
+    private final class PageViewControllerHelper: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+        
+        var links: [NSURL]
+        private let change: (index: Int?) -> Void
+        
+        init(links: [NSURL], change: (index: Int?) -> Void) {
+            self.links = links
+            self.change = change
+            super.init()
+        }
+        
+        // MARK: - Adopted Protocol Methods
+        // MARK: UIPageViewControllerDataSource Methods
+        
+        @objc func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
+            let imageViewController = viewController as? ImageViewController
+            
+            if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
+                if index - 1 >= 0 {
+                    let previousImageViewController = ImageViewController()
+                    previousImageViewController.link = links[index - 1]
+                    
+                    return previousImageViewController
+                }
+            }
+            
+            return nil;
+        }
+        
+        @objc func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
+            let imageViewController = viewController as? ImageViewController
+            
+            if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
+                if index + 1 < links.count {
+                    let nextImageViewController = ImageViewController()
+                    nextImageViewController.link = links[index + 1]
+                    
+                    return nextImageViewController
+                }
+            }
+            
+            return nil;
+        }
+        
+        // MARK: UIPageViewControllerDelegate Methods
+        
+        @objc func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+            if completed {
+                guard let imageViewController = pageViewController.viewControllers?.first as? ImageViewController else {
+                    fatalError("Wrong ViewController in PageViewController")
+                }
+                change(index: imageViewController.link.flatMap({self.links.indexOf($0)}))
+            }
+        }
+    }
     
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
@@ -22,52 +75,73 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
     @IBOutlet weak var topLabelConstraint: NSLayoutConstraint!
     @IBOutlet weak var trailingLabelConstraint: NSLayoutConstraint!
     
-    private var imageViewControllerPool = [ImageViewController]()
+    private let pageViewController: UIPageViewController = {
+        let pageViewController = UIPageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: [UIPageViewControllerOptionInterPageSpacingKey: 8])
+        pageViewController.view.backgroundColor = UIColor.blackColor()
+
+        return pageViewController
+    }()
+    
+    private lazy var pageViewControllerHelper: PageViewControllerHelper = {
+        let pageViewControllerHelper = PageViewControllerHelper(links: self.links) { [unowned self] (index) in
+            self.overlayHidden = true
+            if let index = index {
+                self.infoLabel.text = "\(index + 1)/\(self.links.count)"
+            } else {
+                self.infoLabel.text = ""
+            }
+        }
+        
+        return pageViewControllerHelper
+    }()
+    
     private var links: [NSURL] = [] {
         didSet {
             if isViewLoaded() {
+                pageViewControllerHelper.links = links
                 configurePagesForCurrentLinks()
             }
         }
     }
+
     private var overlayHidden: Bool = false {
         didSet {
-            if overlayHidden != oldValue {
-                if !self.overlayHidden {
-                    self.shareButton.hidden = false
-                    self.closeButton.hidden = false
-                    self.infoLabel.hidden = false
-                    self.shareButton.alpha = 0.0
-                    self.closeButton.alpha = 0.0
-                    self.infoLabel.alpha = 0.0
-                }
-                UIView.animateWithDuration(0.3, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: { () -> Void in
-                    self.shareButton.alpha = self.overlayHidden ? 0.0 : 1.0
-                    self.closeButton.alpha = self.overlayHidden ? 0.0 : 1.0
-                    self.infoLabel.alpha = self.overlayHidden ? 0.0 : 1.0
-                }, completion: { (finished) -> Void in
-                    if self.overlayHidden {
-                        self.shareButton.hidden = false
-                        self.closeButton.hidden = false
-                        self.infoLabel.hidden = false
-                    }
-                })
-            }
+            guard overlayHidden != oldValue else { return }
+            let overlayViews = [shareButton, closeButton, infoLabel]
+            overlayViews.forEach { $0.hidden = false }
+            UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+                overlayViews.forEach { $0.alpha = self.overlayHidden ? 0 : 1 }
+                }, completion: { (finished) in
+                    overlayViews.forEach { $0.hidden = self.overlayHidden }
+            })
         }
     }
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataSource = self
-        delegate = self
+        addChildViewController(pageViewController)
+        view.addSubview(pageViewController.view)
+        if #available(iOS 9, *) {
+            pageViewController.view.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
+            pageViewController.view.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
+            pageViewController.view.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
+            pageViewController.view.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
+        } else {
+            NSLayoutConstraint(item: pageViewController.view, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1.0, constant: 0.0).active = true
+            NSLayoutConstraint(item: pageViewController.view, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1.0, constant: 0.0).active = true
+            NSLayoutConstraint(item: pageViewController.view, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0).active = true
+            NSLayoutConstraint(item: pageViewController.view, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0).active = true
+        }
+        pageViewController.didMoveToParentViewController(self)
+        pageViewController.delegate = pageViewControllerHelper
+        pageViewController.dataSource = pageViewControllerHelper
         configureShareButton()
         configureCloseButton()
         configureInfoLabel()
         configurePagesForCurrentLinks()
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleGesture(_:)))
         view.addGestureRecognizer(tapRecognizer)
-        view.backgroundColor = UIColor(white: 41.0 / 255.0, alpha: 1.0)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -94,58 +168,6 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
     
     override func prefersStatusBarHidden() -> Bool {
         return true
-    }
-    
-    // MARK: - Adopted Protocol Methods
-    // MARK: UIPageViewControllerDataSource Methods
-    
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-        let imageViewController = viewController as? ImageViewController
-        
-        if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
-            if index - 1 >= 0 {
-                let previousImageViewController = dequeueImageViewController()
-                previousImageViewController?.link = links[index - 1]
-                
-                return previousImageViewController
-            }
-        }
-        
-        return nil;
-    }
-    
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-        let imageViewController = viewController as? ImageViewController
-        
-        if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
-            if index + 1 < links.count {
-                let nextImageViewController = dequeueImageViewController()
-                nextImageViewController?.link = links[index + 1]
-                
-                return nextImageViewController
-            }
-        }
-        
-        return nil;
-    }
-    
-    // MARK: UIPageViewControllerDelegate Methods
-    
-    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
-        
-    }
-    
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if completed {
-            overlayHidden = true
-            let imageViewController = viewControllers?.first as? ImageViewController
-            
-            if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
-                infoLabel.text = "\(index + 1)/\(links.count)"
-            } else {
-                infoLabel.text = ""
-            }
-        }
     }
     
     // MARK: - Action Methods
@@ -181,46 +203,16 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
     }
     
     private func configurePagesForCurrentLinks() {
-        var initialImageViewController = viewControllers?.first as? ImageViewController
+        let initialImageViewController = pageViewController.viewControllers?.first as? ImageViewController ?? ImageViewController()
+        initialImageViewController.link = links.first
         
-        if initialImageViewController == nil {
-            initialImageViewController = dequeueImageViewController()
-        }
-        
-        if let viewController = initialImageViewController {
-            viewController.link = links.first
-        }
-        
-        setViewControllers((initialImageViewController != nil ? [initialImageViewController!] : []), direction: UIPageViewControllerNavigationDirection.Forward, animated: false, completion: nil)
+        pageViewController.setViewControllers([initialImageViewController], direction: UIPageViewControllerNavigationDirection.Forward, animated: false, completion: nil)
         
         if links.count > 0 {
             infoLabel.text = "1/\(links.count)"
         } else {
             infoLabel.text = ""
         }
-
-    }
-    
-    private func dequeueImageViewController() -> ImageViewController? {
-        var imageViewController: ImageViewController?
-        
-        for viewController in imageViewControllerPool {
-            if viewController.parentViewController == nil {
-                viewController.prepareForReuse()
-                imageViewController = viewController
-                break
-            }
-        }
-        
-        if imageViewController == nil {
-            imageViewController = storyboard?.instantiateViewControllerWithIdentifier("ImageViewController") as? ImageViewController
-            //webPageController.delegate = self
-            if let viewController = imageViewController {
-                imageViewControllerPool.append(viewController)
-            }
-        }
-        
-        return imageViewController
     }
     
     private func configureShareButton() {
@@ -286,9 +278,9 @@ class GalleryPageViewController: UIPageViewController, UIPageViewControllerDataS
                 verticalCenterLabelConstraint.priority = UILayoutPriorityDefaultLow
             }
             view.addConstraints([topLabelConstraint,
-                                trailingLabelConstraint,
-                                horizontalCenterLabelConstraint,
-                                verticalCenterLabelConstraint])
+                trailingLabelConstraint,
+                horizontalCenterLabelConstraint,
+                verticalCenterLabelConstraint])
             infoLabel = label
         }
     }

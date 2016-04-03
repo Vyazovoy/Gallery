@@ -13,6 +13,7 @@ class RootViewController: UIViewController {
     @IBOutlet weak var modalButton: UIButton!
     @IBOutlet weak var navigationButton: UIButton!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,28 +32,20 @@ class RootViewController: UIViewController {
     }
 
     @IBAction func buttonTapped(sender: UIButton) {
-        let viewController = self.storyboard?.instantiateViewControllerWithIdentifier("GalleryPageViewController") as? GalleryPageViewController
+        let galleryViewController = GalleryViewController()
         
-        if let galleryPageViewController = viewController {
-            let linkStrings = ["http://fr.academic.ru/pictures/frwiki/77/M101_hires_STScI-PRC2006-10a.jpg",
-                               "http://www.turbophoto.com/space/webart/sunb-hires.jpg",
-                               "http://www.wallpaperzzz.com/wallpapers/hd/hires/big-tree.jpg",
-                               "http://www.turbophoto.com/hires/shuttle2-hires.jpeg",
-                               "http://blog.dannyweeks.com/wp-content/uploads/2013/08/Saturns-moon-Enceladus-hires-Desktop-Wallpaper.jpg"]
-            let links = linkStrings.map { NSURL(string: $0) }.reduce([NSURL]()) { acc, value in
-                if let value = value {
-                    return acc + [value]
-                } else {
-                    return acc
-                }
-            }
-            galleryPageViewController.showImages(links)
-            
-            if sender == modalButton {
-                self.navigationController?.presentViewController(galleryPageViewController, animated: true, completion: nil)
-            } else {
-                self.navigationController?.showViewController(galleryPageViewController, sender: self)
-            }
+        let linkStrings = ["http://fr.academic.ru/pictures/frwiki/77/M101_hires_STScI-PRC2006-10a.jpg",
+                           "http://pix-batl.ru/toimg/31/linii_svet_zelenyy_setka_2560x1600.jpg",
+                           "http://www.wallpaperzzz.com/wallpapers/hd/hires/big-tree.jpg",
+                           "http://www.wallpaperup.com/uploads/wallpapers/2013/01/11/28649/thumb_38f25ce4010e22aecdfd1946a790b9a6.jpg",
+                           "http://hqwall.ru/files/40/dym_linii_raznocvetnyy_fon_soedinenie_2560x1600.jpg"]
+        let links = linkStrings.flatMap { NSURL(string: $0) }
+        galleryViewController.showImages(links)
+        
+        if sender == modalButton {
+            self.navigationController?.presentViewController(galleryViewController, animated: true, completion: nil)
+        } else {
+            self.navigationController?.showViewController(galleryViewController, sender: self)
         }
     }
 }

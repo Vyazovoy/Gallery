@@ -70,15 +70,5 @@
             </objects>
             <point key="canvasLocation" x="51" y="339"/>
         </scene>
-        <!--Gallery Page View Controller-->
-        <scene sceneID="szq-cy-3qO">
-            <objects>
-                <pageViewController storyboardIdentifier="GalleryPageViewController" autoresizesArchivedViewToFullSize="NO" automaticallyAdjustsScrollViewInsets="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="fi7-4w-Rsm" customClass="GalleryPageViewController" customModule="Gallery" customModuleProvider="target" sceneMemberID="viewController">
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                </pageViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZG7-76-dPX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2049" y="339"/>
-        </scene>
     </scenes>
 </document>

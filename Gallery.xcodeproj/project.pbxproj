@@ -12,7 +12,7 @@
 		1324039A1A27DB1B00781EC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132403931A27DB1B00781EC5 /* AppDelegate.swift */; };
 		1324039C1A27DB1B00781EC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 132403971A27DB1B00781EC5 /* Main.storyboard */; };
 		1324039D1A27DB1B00781EC5 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132403991A27DB1B00781EC5 /* RootViewController.swift */; };
-		1324039F1A27DD8200781EC5 /* GalleryPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1324039E1A27DD8200781EC5 /* GalleryPageViewController.swift */; };
+		1324039F1A27DD8200781EC5 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1324039E1A27DD8200781EC5 /* GalleryViewController.swift */; };
 		132403A21A27E47D00781EC5 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132403A11A27E47D00781EC5 /* ImageViewController.swift */; };
 		13E91D3D1CADC72900483CAC /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13E91D3C1CADC72900483CAC /* WebImage.framework */; };
 		13E91D7B1CAE835800483CAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E91D7D1CAE835800483CAC /* LaunchScreen.storyboard */; };
@@ -38,7 +38,7 @@
 		132403931A27DB1B00781EC5 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		132403981A27DB1B00781EC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		132403991A27DB1B00781EC5 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		1324039E1A27DD8200781EC5 /* GalleryPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryPageViewController.swift; sourceTree = "<group>"; };
+		1324039E1A27DD8200781EC5 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		132403A11A27E47D00781EC5 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		13E91D3C1CADC72900483CAC /* WebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebImage.framework; path = Carthage/Build/iOS/WebImage.framework; sourceTree = "<group>"; };
 		13E91D7C1CAE835800483CAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 				13E91D7D1CAE835800483CAC /* LaunchScreen.storyboard */,
 				132403971A27DB1B00781EC5 /* Main.storyboard */,
 				132403991A27DB1B00781EC5 /* RootViewController.swift */,
-				1324039E1A27DD8200781EC5 /* GalleryPageViewController.swift */,
+				1324039E1A27DD8200781EC5 /* GalleryViewController.swift */,
 				132403A11A27E47D00781EC5 /* ImageViewController.swift */,
 			);
 			path = UI;
@@ -258,7 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1324039F1A27DD8200781EC5 /* GalleryPageViewController.swift in Sources */,
+				1324039F1A27DD8200781EC5 /* GalleryViewController.swift in Sources */,
 				1324039A1A27DB1B00781EC5 /* AppDelegate.swift in Sources */,
 				1324039D1A27DB1B00781EC5 /* RootViewController.swift in Sources */,
 				132403A21A27E47D00781EC5 /* ImageViewController.swift in Sources */,
