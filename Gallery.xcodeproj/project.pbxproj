@@ -87,35 +87,18 @@
 			children = (
 				132403921A27DB1B00781EC5 /* Source */,
 				1324038F1A27D90100781EC5 /* Assets */,
-				1324036D1A27D5F000781EC5 /* Supporting Files */,
+				1324036E1A27D5F000781EC5 /* Info.plist */,
 			);
 			path = Gallery;
-			sourceTree = "<group>";
-		};
-		1324036D1A27D5F000781EC5 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				1324036E1A27D5F000781EC5 /* Info.plist */,
-				132403BA1A2B2D0000781EC5 /* Gallery-Bridging-Header.h */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		132403821A27D5F000781EC5 /* GalleryTests */ = {
 			isa = PBXGroup;
 			children = (
 				132403851A27D5F000781EC5 /* GalleryTests.swift */,
-				132403831A27D5F000781EC5 /* Supporting Files */,
-			);
-			path = GalleryTests;
-			sourceTree = "<group>";
-		};
-		132403831A27D5F000781EC5 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
 				132403841A27D5F000781EC5 /* Info.plist */,
 			);
-			name = "Supporting Files";
+			path = GalleryTests;
 			sourceTree = "<group>";
 		};
 		1324038F1A27D90100781EC5 /* Assets */ = {
