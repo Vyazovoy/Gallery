@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebImage
 
 class ImageViewController: UIViewController, UIScrollViewDelegate {
     
@@ -54,7 +55,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     private func configureImageViewForCurrentLink() {
         if let currentLink = link {
             activityIndicatorView.startAnimating()
-            imageView.sd_setImageWithURL(currentLink, placeholderImage: nil, options: SDWebImageOptions.ScaleToScreen, completed: { (image, error, cacheType, imageURL) -> Void in
+            imageView.sd_setImageWithURL(currentLink, placeholderImage: nil, options: .RetryFailed, completed: { (image, error, cacheType, imageURL) -> Void in
                 if image != nil {
                     print("\(image.scale)")
                 }
