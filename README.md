@@ -1,4 +1,4 @@
-Test
+Gallery
 ====
 
-Great app for cool job
+Simple photo gallery.
