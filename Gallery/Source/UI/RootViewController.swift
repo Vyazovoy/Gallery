@@ -20,7 +20,7 @@
 
 import UIKit
 
-class RootViewController: UIViewController {
+final class RootViewController: UIViewController {
 
     @IBOutlet weak var modalButton: UIButton!
     @IBOutlet weak var navigationButton: UIButton!
