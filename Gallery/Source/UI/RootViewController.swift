@@ -54,7 +54,7 @@ final class RootViewController: UIViewController {
         let links = linkStrings.flatMap { URL(string: $0) }
         galleryViewController.showImages(links)
         
-        if sender == modalButton {
+        if sender === modalButton {
             self.navigationController?.present(galleryViewController, animated: true, completion: nil)
         } else {
             self.navigationController?.show(galleryViewController, sender: self)
