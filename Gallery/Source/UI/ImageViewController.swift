@@ -36,7 +36,7 @@ final class ImageViewController: UIViewController {
         // MARK: UIScrollViewDelegate Methods
         
         @objc func scrollViewDidZoom(_ scrollView: UIScrollView) {
-            scrollView.centerContent()
+            scrollView.centerizeContent()
         }
         
         @objc func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
@@ -146,7 +146,7 @@ final class ImageViewController: UIViewController {
         super.viewDidLayoutSubviews()
         print("Layout start")
         configureScrollViewZoomScale()
-        scrollView.centerContent()
+        scrollView.centerizeContent()
         print("Layout finish  ")
     }
     
@@ -185,7 +185,7 @@ final class ImageViewController: UIViewController {
 
 private extension UIScrollView {
     
-    func centerContent() {
+    func centerizeContent() {
         var horizontalInset: CGFloat
         var verticalInset: CGFloat
         
