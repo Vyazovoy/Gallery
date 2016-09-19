@@ -31,7 +31,7 @@ class RootViewController: UIViewController {
         
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let navigationController = navigationController {
             navigationController.setNavigationBarHidden(false, animated: animated)
@@ -43,7 +43,7 @@ class RootViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func buttonTapped(sender: UIButton) {
+    @IBAction func buttonTapped(_ sender: UIButton) {
         let galleryViewController = GalleryViewController()
         
         let linkStrings = ["http://fr.academic.ru/pictures/frwiki/77/M101_hires_STScI-PRC2006-10a.jpg",
@@ -51,13 +51,13 @@ class RootViewController: UIViewController {
                            "http://www.wallpaperzzz.com/wallpapers/hd/hires/big-tree.jpg",
                            "http://www.wallpaperup.com/uploads/wallpapers/2013/01/11/28649/thumb_38f25ce4010e22aecdfd1946a790b9a6.jpg",
                            "http://hqwall.ru/files/40/dym_linii_raznocvetnyy_fon_soedinenie_2560x1600.jpg"]
-        let links = linkStrings.flatMap { NSURL(string: $0) }
+        let links = linkStrings.flatMap { URL(string: $0) }
         galleryViewController.showImages(links)
         
         if sender == modalButton {
-            self.navigationController?.presentViewController(galleryViewController, animated: true, completion: nil)
+            self.navigationController?.present(galleryViewController, animated: true, completion: nil)
         } else {
-            self.navigationController?.showViewController(galleryViewController, sender: self)
+            self.navigationController?.show(galleryViewController, sender: self)
         }
     }
 }

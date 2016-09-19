@@ -23,9 +23,9 @@ import WebImage
 
 final class ImageViewController: UIViewController {
     
-    private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
+    fileprivate final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
         
-        private let zoomableView: UIView
+        fileprivate let zoomableView: UIView
         
         
         init(zoomableView: UIView) {
@@ -35,47 +35,47 @@ final class ImageViewController: UIViewController {
         // MARK: - Adopted Protocol Methods
         // MARK: UIScrollViewDelegate Methods
         
-        @objc func scrollViewDidZoom(scrollView: UIScrollView) {
+        @objc func scrollViewDidZoom(_ scrollView: UIScrollView) {
             scrollView.centerContent()
         }
         
-        @objc func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?) {
-            scrollView.panGestureRecognizer.enabled = true
+        @objc func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+            scrollView.panGestureRecognizer.isEnabled = true
             scrollView.alwaysBounceVertical = true
             scrollView.alwaysBounceHorizontal = true
         }
         
-        @objc func scrollViewDidEndZooming(scrollView: UIScrollView, withView view: UIView?, atScale scale: CGFloat) {
+        @objc func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
             if scrollView.zoomScale == scrollView.minimumZoomScale {
-                scrollView.panGestureRecognizer.enabled = false
+                scrollView.panGestureRecognizer.isEnabled = false
                 scrollView.alwaysBounceVertical = false
                 scrollView.alwaysBounceHorizontal = false
             }
         }
         
-        @objc func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+        @objc func viewForZooming(in scrollView: UIScrollView) -> UIView? {
             return zoomableView
         }
     }
     
-    private let scrollView: UIScrollView = {
+    fileprivate let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.bouncesZoom = true
         scrollView.decelerationRate = UIScrollViewDecelerationRateFast
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.backgroundColor = UIColor.blackColor()
+        scrollView.backgroundColor = UIColor.black
         return scrollView
     }()
-    private let imageView: UIImageView = {
+    fileprivate let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = UIColor.clearColor()
+        imageView.backgroundColor = UIColor.clear
         return imageView
     }()
-    private var activityIndicatorView: UIActivityIndicatorView = {
-        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .White)
+    fileprivate var activityIndicatorView: UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicatorView.startAnimating()
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicatorView
@@ -86,11 +86,11 @@ final class ImageViewController: UIViewController {
             return imageView.image
         }
         set {
-            imageView.transform = CGAffineTransformIdentity
+            imageView.transform = CGAffineTransform.identity
             imageView.image = newValue
-            imageView.frame = CGRect(origin: CGPointZero, size: imageView.image?.size ?? CGSizeZero)
+            imageView.frame = CGRect(origin: CGPoint.zero, size: imageView.image?.size ?? CGSize.zero)
             scrollView.contentSize = imageView.frame.size
-            if isViewLoaded() {
+            if isViewLoaded {
                 view.setNeedsLayout()
                 
                 if imageView.image != nil {
@@ -102,14 +102,14 @@ final class ImageViewController: UIViewController {
         }
     }
     
-    private lazy var scrollViewDelegate: ScrollViewDelegate = {
+    fileprivate lazy var scrollViewDelegate: ScrollViewDelegate = {
         let scrollViewDelegate = ScrollViewDelegate(zoomableView: self.imageView)
         return scrollViewDelegate
     }()
     
-    var link: NSURL? = nil {
+    var link: URL? = nil {
         didSet {
-            if isViewLoaded() {
+            if isViewLoaded {
                 configureImageViewForCurrentLink()
             }
         }
@@ -120,26 +120,26 @@ final class ImageViewController: UIViewController {
         print("Did load start")
         view.addSubview(scrollView)
         if #available(iOS 9, *) {
-            scrollView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-            scrollView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
-            scrollView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
-            scrollView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         } else {
-            NSLayoutConstraint(item: scrollView, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1.0, constant: 0.0).active = true
-            NSLayoutConstraint(item: scrollView, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1.0, constant: 0.0).active = true
-            NSLayoutConstraint(item: scrollView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0).active = true
-            NSLayoutConstraint(item: scrollView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0).active = true
+            NSLayoutConstraint(item: scrollView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0.0).isActive = true
+            NSLayoutConstraint(item: scrollView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0.0).isActive = true
+            NSLayoutConstraint(item: scrollView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0.0).isActive = true
+            NSLayoutConstraint(item: scrollView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0.0).isActive = true
         }
         scrollView.addSubview(imageView)
         scrollView.delegate = scrollViewDelegate
         view.addSubview(activityIndicatorView)
         
         if #available(iOS 9, *) {
-            activityIndicatorView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-            activityIndicatorView.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor).active = true
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         } else {
-            NSLayoutConstraint(item: activityIndicatorView, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1.0, constant: 0.0).active = true
-            NSLayoutConstraint(item: activityIndicatorView, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterY, multiplier: 1.0, constant: 0.0).active = true
+            NSLayoutConstraint(item: activityIndicatorView, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0.0).isActive = true
+            NSLayoutConstraint(item: activityIndicatorView, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0).isActive = true
         }
         configureImageViewForCurrentLink()
         print("Did load finish")
@@ -155,9 +155,9 @@ final class ImageViewController: UIViewController {
     
     // MARK: - Custom Methods
     
-    private func configureImageViewForCurrentLink() {
+    fileprivate func configureImageViewForCurrentLink() {
         if let currentLink = link {
-            SDWebImageManager.sharedManager().downloadImageWithURL(currentLink, options: .RetryFailed, progress: nil, completed: { (image, error, cacheType, completed, imageURL) in
+            SDWebImageManager.shared().downloadImage(with: currentLink, options: .retryFailed, progress: nil, completed: { (image, error, cacheType, completed, imageURL) in
                 self.image = image
             })
         } else {
@@ -165,8 +165,8 @@ final class ImageViewController: UIViewController {
         }
     }
     
-    private func configureScrollViewZoomScale() {
-        if let image = image where image.size.height > 0 && image.size.width > 0 {
+    fileprivate func configureScrollViewZoomScale() {
+        if let image = image , image.size.height > 0 && image.size.width > 0 {
             let horizontalRatio = scrollView.bounds.size.width / image.size.width
             let verticalRatio = scrollView.bounds.size.height / image.size.height
             scrollView.minimumZoomScale = min(horizontalRatio, verticalRatio)
@@ -176,7 +176,7 @@ final class ImageViewController: UIViewController {
             scrollView.maximumZoomScale = 1.0
         }
         scrollView.zoomScale = scrollView.minimumZoomScale
-        scrollView.panGestureRecognizer.enabled = false
+        scrollView.panGestureRecognizer.isEnabled = false
         scrollView.alwaysBounceVertical = false
         scrollView.alwaysBounceHorizontal = false
     }
@@ -204,7 +204,7 @@ private extension UIScrollView {
             verticalInset = 0.0
         }
         
-        if let window = window where window.screen.scale < 2.0 {
+        if let window = window , window.screen.scale < 2.0 {
             horizontalInset = floor(horizontalInset);
             verticalInset = floor(verticalInset);
         }

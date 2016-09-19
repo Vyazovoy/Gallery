@@ -22,12 +22,12 @@ import UIKit
 
 final class GalleryViewController: UIViewController {
     
-    private final class PageViewControllerHelper: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    fileprivate final class PageViewControllerHelper: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
         
-        var links: [NSURL]
-        private let change: (index: Int?) -> Void
+        var links: [URL]
+        fileprivate let change: (_ index: Int?) -> Void
         
-        init(links: [NSURL], change: (index: Int?) -> Void) {
+        init(links: [URL], change: @escaping (_ index: Int?) -> Void) {
             self.links = links
             self.change = change
             super.init()
@@ -36,10 +36,10 @@ final class GalleryViewController: UIViewController {
         // MARK: - Adopted Protocol Methods
         // MARK: UIPageViewControllerDataSource Methods
         
-        @objc func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
+        @objc func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
             let imageViewController = viewController as? ImageViewController
             
-            if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
+            if let index = imageViewController?.link.flatMap({self.links.index(of: $0)}) {
                 if index - 1 >= 0 {
                     let previousImageViewController = ImageViewController()
                     previousImageViewController.link = links[index - 1]
@@ -51,10 +51,10 @@ final class GalleryViewController: UIViewController {
             return nil;
         }
         
-        @objc func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
+        @objc func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
             let imageViewController = viewController as? ImageViewController
             
-            if let index = imageViewController?.link.flatMap({self.links.indexOf($0)}) {
+            if let index = imageViewController?.link.flatMap({self.links.index(of: $0)}) {
                 if index + 1 < links.count {
                     let nextImageViewController = ImageViewController()
                     nextImageViewController.link = links[index + 1]
@@ -68,12 +68,12 @@ final class GalleryViewController: UIViewController {
         
         // MARK: UIPageViewControllerDelegate Methods
         
-        @objc func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        @objc func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
             if completed {
                 guard let imageViewController = pageViewController.viewControllers?.first as? ImageViewController else {
                     fatalError("Wrong ViewController in PageViewController")
                 }
-                change(index: imageViewController.link.flatMap({self.links.indexOf($0)}))
+                change(imageViewController.link.flatMap({self.links.index(of: $0)}))
             }
         }
     }
@@ -87,14 +87,14 @@ final class GalleryViewController: UIViewController {
     @IBOutlet weak var topLabelConstraint: NSLayoutConstraint!
     @IBOutlet weak var trailingLabelConstraint: NSLayoutConstraint!
     
-    private let pageViewController: UIPageViewController = {
-        let pageViewController = UIPageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: [UIPageViewControllerOptionInterPageSpacingKey: 8])
-        pageViewController.view.backgroundColor = UIColor.blackColor()
+    fileprivate let pageViewController: UIPageViewController = {
+        let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionInterPageSpacingKey: 8])
+        pageViewController.view.backgroundColor = UIColor.black
 
         return pageViewController
     }()
     
-    private lazy var pageViewControllerHelper: PageViewControllerHelper = {
+    fileprivate lazy var pageViewControllerHelper: PageViewControllerHelper = {
         let pageViewControllerHelper = PageViewControllerHelper(links: self.links) { [unowned self] (index) in
             self.overlayHidden = true
             if let index = index {
@@ -107,24 +107,24 @@ final class GalleryViewController: UIViewController {
         return pageViewControllerHelper
     }()
     
-    private var links: [NSURL] = [] {
+    fileprivate var links: [URL] = [] {
         didSet {
-            if isViewLoaded() {
+            if isViewLoaded {
                 pageViewControllerHelper.links = links
                 configurePagesForCurrentLinks()
             }
         }
     }
 
-    private var overlayHidden: Bool = false {
+    fileprivate var overlayHidden: Bool = false {
         didSet {
             guard overlayHidden != oldValue else { return }
-            let overlayViews = [shareButton, closeButton, infoLabel]
-            overlayViews.forEach { $0.hidden = false }
-            UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+            let overlayViews = [shareButton, closeButton, infoLabel] as [UIView]
+            overlayViews.forEach { $0.isHidden = false }
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseIn, animations: {
                 overlayViews.forEach { $0.alpha = self.overlayHidden ? 0 : 1 }
                 }, completion: { (finished) in
-                    overlayViews.forEach { $0.hidden = self.overlayHidden }
+                    overlayViews.forEach { $0.isHidden = self.overlayHidden }
             })
         }
     }
@@ -135,17 +135,17 @@ final class GalleryViewController: UIViewController {
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
         if #available(iOS 9, *) {
-            pageViewController.view.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-            pageViewController.view.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
-            pageViewController.view.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
-            pageViewController.view.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
+            pageViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+            pageViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            pageViewController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            pageViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         } else {
-            NSLayoutConstraint(item: pageViewController.view, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1.0, constant: 0.0).active = true
-            NSLayoutConstraint(item: pageViewController.view, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1.0, constant: 0.0).active = true
-            NSLayoutConstraint(item: pageViewController.view, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0).active = true
-            NSLayoutConstraint(item: pageViewController.view, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0).active = true
+            NSLayoutConstraint(item: pageViewController.view, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0.0).isActive = true
+            NSLayoutConstraint(item: pageViewController.view, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0.0).isActive = true
+            NSLayoutConstraint(item: pageViewController.view, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0.0).isActive = true
+            NSLayoutConstraint(item: pageViewController.view, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0.0).isActive = true
         }
-        pageViewController.didMoveToParentViewController(self)
+        pageViewController.didMove(toParentViewController: self)
         pageViewController.delegate = pageViewControllerHelper
         pageViewController.dataSource = pageViewControllerHelper
         configureShareButton()
@@ -156,7 +156,7 @@ final class GalleryViewController: UIViewController {
         view.addGestureRecognizer(tapRecognizer)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let navigationController = navigationController {
             navigationController.setNavigationBarHidden(true, animated: animated)
@@ -165,7 +165,7 @@ final class GalleryViewController: UIViewController {
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
-        if traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact {
+        if traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact {
             topLabelConstraint.priority = UILayoutPriorityDefaultLow
             trailingLabelConstraint.priority = UILayoutPriorityDefaultHigh
             horizontalCenterLabelConstraint.priority = UILayoutPriorityDefaultLow
@@ -178,13 +178,13 @@ final class GalleryViewController: UIViewController {
         }
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
     // MARK: - Action Methods
     
-    @IBAction func buttonTapped(sender: UIButton) {
+    @IBAction func buttonTapped(_ sender: UIButton) {
         switch (sender) {
         case shareButton:
             print("Share")
@@ -192,9 +192,9 @@ final class GalleryViewController: UIViewController {
         case closeButton:
             print("Close")
             if let navigationController = navigationController {
-                navigationController.popViewControllerAnimated(true)
+                navigationController.popViewController(animated: true)
             } else {
-                dismissViewControllerAnimated(true, completion: nil)
+                dismiss(animated: true, completion: nil)
             }
             
         default:
@@ -202,23 +202,23 @@ final class GalleryViewController: UIViewController {
         }
     }
     
-    @IBAction func handleGesture(recognizer: UIGestureRecognizer) {
-        if recognizer.state == .Ended {
+    @IBAction func handleGesture(_ recognizer: UIGestureRecognizer) {
+        if recognizer.state == .ended {
             overlayHidden = !overlayHidden
         }
     }
     
     // MARK: - Custom Methods
     
-    func showImages(links: [NSURL]) {
+    func showImages(_ links: [URL]) {
         self.links = links
     }
     
-    private func configurePagesForCurrentLinks() {
+    fileprivate func configurePagesForCurrentLinks() {
         let initialImageViewController = pageViewController.viewControllers?.first as? ImageViewController ?? ImageViewController()
         initialImageViewController.link = links.first
         
-        pageViewController.setViewControllers([initialImageViewController], direction: UIPageViewControllerNavigationDirection.Forward, animated: false, completion: nil)
+        pageViewController.setViewControllers([initialImageViewController], direction: UIPageViewControllerNavigationDirection.forward, animated: false, completion: nil)
         
         if links.count > 0 {
             infoLabel.text = "1/\(links.count)"
@@ -227,58 +227,58 @@ final class GalleryViewController: UIViewController {
         }
     }
     
-    private func configureShareButton() {
+    fileprivate func configureShareButton() {
         if shareButton == nil {
             let button = UIButton()
-            button.tintColor = UIColor.whiteColor()
-            button.setImage(UIImage(named: "ShareButtonImage"), forState: UIControlState.Normal)
-            button.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            button.tintColor = UIColor.white
+            button.setImage(UIImage(named: "ShareButtonImage"), for: UIControlState())
+            button.addTarget(self, action: #selector(buttonTapped(_:)), for: UIControlEvents.touchUpInside)
             button.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(button)
             
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-6-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
-            button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44.0))
-            button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44.0))
+            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
+            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-6-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
+            button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 44.0))
+            button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 44.0))
             shareButton = button
         }
     }
     
-    private func configureCloseButton() {
+    fileprivate func configureCloseButton() {
         if closeButton == nil {
             let button = UIButton()
-            button.tintColor = UIColor.whiteColor()
-            button.setImage(UIImage(named: "CloseButtonImage"), forState: UIControlState.Normal)
-            button.addTarget(self, action: #selector(buttonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            button.tintColor = UIColor.white
+            button.setImage(UIImage(named: "CloseButtonImage"), for: UIControlState())
+            button.addTarget(self, action: #selector(buttonTapped(_:)), for: UIControlEvents.touchUpInside)
             button.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(button)
             
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-10-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[button]-6-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
-            button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44.0))
-            button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44.0))
+            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[button]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
+            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[button]-6-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["button" : button]))
+            button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 44.0))
+            button.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 44.0))
             closeButton = button
         }
     }
     
-    private func configureInfoLabel() {
+    fileprivate func configureInfoLabel() {
         if infoLabel == nil {
             let label = UILabel()
-            label.textColor = UIColor.whiteColor()
+            label.textColor = UIColor.white
             label.font = UIFont(name: "Helvetica Neue", size: 16.0)
             label.text = "16/20"
             label.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(label)
             
-            topLabelConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:|-24-[label]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["label" : label]).first!
+            topLabelConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:|-24-[label]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["label" : label]).first!
             
-            trailingLabelConstraint = NSLayoutConstraint.constraintsWithVisualFormat("H:[label]-16-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["label" : label]).first!
+            trailingLabelConstraint = NSLayoutConstraint.constraints(withVisualFormat: "H:[label]-16-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["label" : label]).first!
             
-            horizontalCenterLabelConstraint = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0)
+            horizontalCenterLabelConstraint = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0)
             
-            verticalCenterLabelConstraint = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0.0)
+            verticalCenterLabelConstraint = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0)
             
-            if traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact {
+            if traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact {
                 topLabelConstraint.priority = UILayoutPriorityDefaultLow
                 trailingLabelConstraint.priority = UILayoutPriorityDefaultHigh
                 horizontalCenterLabelConstraint.priority = UILayoutPriorityDefaultLow
