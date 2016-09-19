@@ -102,10 +102,7 @@ final class ImageViewController: UIViewController {
         }
     }
     
-    fileprivate lazy var scrollViewDelegate: ScrollViewDelegate = {
-        let scrollViewDelegate = ScrollViewDelegate(zoomableView: self.imageView)
-        return scrollViewDelegate
-    }()
+    fileprivate lazy var scrollViewDelegate: ScrollViewDelegate = .init(zoomableView: self.imageView)
     
     var link: URL? = nil {
         didSet {
