@@ -14,6 +14,7 @@
 		1324039D1A27DB1B00781EC5 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132403991A27DB1B00781EC5 /* RootViewController.swift */; };
 		1324039F1A27DD8200781EC5 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1324039E1A27DD8200781EC5 /* GalleryViewController.swift */; };
 		132403A21A27E47D00781EC5 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132403A11A27E47D00781EC5 /* ImageViewController.swift */; };
+		139F44141D908F2D00A56ABE /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13E91D3C1CADC72900483CAC /* WebImage.framework */; };
 		13E91D3D1CADC72900483CAC /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13E91D3C1CADC72900483CAC /* WebImage.framework */; };
 		13E91D7B1CAE835800483CAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E91D7D1CAE835800483CAC /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				139F44141D908F2D00A56ABE /* WebImage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,7 +196,9 @@
 					};
 					1324037E1A27D5F000781EC5 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = Y4TGD6U52H;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 132403691A27D5F000781EC5;
 					};
 				};
@@ -433,13 +437,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = Y4TGD6U52H;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = GalleryTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -454,9 +455,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = Y4TGD6U52H;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = GalleryTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
