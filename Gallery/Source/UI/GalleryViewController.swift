@@ -166,15 +166,15 @@ final class GalleryViewController: UIViewController {
     override func updateViewConstraints() {
         super.updateViewConstraints()
         if traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact {
-            topLabelConstraint.priority = UILayoutPriorityDefaultLow
-            trailingLabelConstraint.priority = UILayoutPriorityDefaultHigh
-            horizontalCenterLabelConstraint.priority = UILayoutPriorityDefaultLow
-            verticalCenterLabelConstraint.priority = UILayoutPriorityDefaultHigh
+            topLabelConstraint.priority = .defaultLow
+            trailingLabelConstraint.priority = .defaultHigh
+            horizontalCenterLabelConstraint.priority = .defaultLow
+            verticalCenterLabelConstraint.priority = .defaultHigh
         } else {
-            topLabelConstraint.priority = UILayoutPriorityDefaultHigh
-            trailingLabelConstraint.priority = UILayoutPriorityDefaultLow
-            horizontalCenterLabelConstraint.priority = UILayoutPriorityDefaultHigh
-            verticalCenterLabelConstraint.priority = UILayoutPriorityDefaultLow
+            topLabelConstraint.priority = .defaultHigh
+            trailingLabelConstraint.priority = .defaultLow
+            horizontalCenterLabelConstraint.priority = .defaultHigh
+            verticalCenterLabelConstraint.priority = .defaultLow
         }
     }
     
@@ -279,15 +279,15 @@ final class GalleryViewController: UIViewController {
             verticalCenterLabelConstraint = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0)
             
             if traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact {
-                topLabelConstraint.priority = UILayoutPriorityDefaultLow
-                trailingLabelConstraint.priority = UILayoutPriorityDefaultHigh
-                horizontalCenterLabelConstraint.priority = UILayoutPriorityDefaultLow
-                verticalCenterLabelConstraint.priority = UILayoutPriorityDefaultHigh
+                topLabelConstraint.priority = .defaultLow
+                trailingLabelConstraint.priority = .defaultHigh
+                horizontalCenterLabelConstraint.priority = .defaultLow
+                verticalCenterLabelConstraint.priority = .defaultHigh
             } else {
-                topLabelConstraint.priority = UILayoutPriorityDefaultHigh
-                trailingLabelConstraint.priority = UILayoutPriorityDefaultLow
-                horizontalCenterLabelConstraint.priority = UILayoutPriorityDefaultHigh
-                verticalCenterLabelConstraint.priority = UILayoutPriorityDefaultLow
+                topLabelConstraint.priority = .defaultHigh
+                trailingLabelConstraint.priority = .defaultLow
+                horizontalCenterLabelConstraint.priority = .defaultHigh
+                verticalCenterLabelConstraint.priority = .defaultLow
             }
             view.addConstraints([topLabelConstraint,
                 trailingLabelConstraint,
