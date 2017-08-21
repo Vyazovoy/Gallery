@@ -33,16 +33,10 @@ final class RootViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let navigationController = navigationController {
-            navigationController.setNavigationBarHidden(false, animated: animated)
-        }
+        
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     @IBAction func buttonTapped(_ sender: UIButton) {
         let galleryViewController = GalleryViewController()
         
