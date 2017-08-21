@@ -78,14 +78,14 @@ final class GalleryViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var shareButton: UIButton!
-    @IBOutlet weak var closeButton: UIButton!
-    @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet private var shareButton: UIButton!
+    @IBOutlet private var closeButton: UIButton!
+    @IBOutlet private var infoLabel: UILabel!
     
-    @IBOutlet weak var horizontalCenterLabelConstraint: NSLayoutConstraint!
-    @IBOutlet weak var verticalCenterLabelConstraint: NSLayoutConstraint!
-    @IBOutlet weak var topLabelConstraint: NSLayoutConstraint!
-    @IBOutlet weak var trailingLabelConstraint: NSLayoutConstraint!
+    @IBOutlet private var horizontalCenterLabelConstraint: NSLayoutConstraint!
+    @IBOutlet private var verticalCenterLabelConstraint: NSLayoutConstraint!
+    @IBOutlet private var topLabelConstraint: NSLayoutConstraint!
+    @IBOutlet private var trailingLabelConstraint: NSLayoutConstraint!
     
     fileprivate let pageViewController: UIPageViewController = {
         let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionInterPageSpacingKey: 8])

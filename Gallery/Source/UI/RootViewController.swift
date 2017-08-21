@@ -22,8 +22,8 @@ import UIKit
 
 final class RootViewController: UIViewController {
 
-    @IBOutlet weak var modalButton: UIButton!
-    @IBOutlet weak var navigationButton: UIButton!
+    @IBOutlet private var modalButton: UIButton!
+    @IBOutlet private var navigationButton: UIButton!
     
     
     override func viewDidLoad() {
